@@ -1,0 +1,50 @@
+name: woofway
+
+services:
+  # MongoDB
+  mongodb:
+    image: mongo:7.0  
+    container_name: woofway_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: WoofWayDb
+    volumes:
+      - mongo_data:/data/db
+
+  # Python Computer Vision Service
+  cv-service:
+    build:
+      context: ./src/WoofWay.AI
+      dockerfile: Dockerfile
+    container_name: woofway_cv_service
+    restart: always
+    ports:
+      - "5001:8080"
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    volumes:
+      - ./src/WoofWay.AI/app:/app/app 
+      - ai_model_cache:/root/.cache/huggingface # Ovde cuva model
+
+  seq:
+    image: datalust/seq:latest
+    container_name: woofway-seq
+    restart: always
+    ports:
+      - "5341:5341"     
+      - "8081:80"       
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FIRSTRUN_ADMINPASSWORD: "password"
+
+volumes:
+  mongo_data:
+    driver: local
+  ai_model_cache: 
+    driver: local

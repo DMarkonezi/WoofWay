@@ -1,0 +1,32 @@
+# .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+*.userprefs
+*.csproj.user
+
+# Build and Publish
+publish/
+*.nupkg
+
+# Logs and databases
+logs/
+*.log
+*.sqlite
+*.db
+*.mdf
+*.ldf
+
+# .NET User Secrets
+secrets.json
+
+# Ostalo
+.DS_Store
+
+obj/
+bin/
+
+.env
+__pycache__/
